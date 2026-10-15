@@ -47,12 +47,12 @@ npm run preflight   # CWS uyumluluk denetimi
 | Description | `STORE_LISTING.md` → Description (TR) | 16.000 karakter |
 | Language | English + Türkçe (İkisi de eklenir) | — |
 | Icon | `extension/icons/icon128.png` | 128x128, ≤1 MB |
-| Screenshots | `store-assets/tr-basic-1280x800.png`, `tr-full-…`, `tr-off-…` | 1280x800 veya 640x400 |
+| Screenshots | `store-assets/tr-basic-1280x800.png`, `tr-full-…`, `tr-off-…`, `about-tr-…` | 1280x800 veya 640x400 |
 | Small promo tile | `store-assets/promo-440x280.png` | 440x280 |
 | Category | Productivity | — |
 | Homepage | <https://github.com/sosyalilgi/adkalkan> | — |
 | Support site | <https://github.com/sosyalilgi/adkalkan/issues> | — |
-| Support email | `SUPPORT_EMAIL` (CWS zorunlu kılar) | zorunlu |
+| Support email | ferhatdogan55@gmail.com | zorunlu |
 | Privacy policy | <https://sosyalilgi.github.io/adkalkan/privacy.html> | zorunlu |
 
 > **Not:** Ekran görüntüleri tek dille sunulur (mağaza görselleri yerelleştirilemez).

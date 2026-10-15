@@ -13,10 +13,10 @@
 | Language | English + Türkçe |
 | Homepage | <https://github.com/sosyalilgi/adkalkan> |
 | Support site | <https://github.com/sosyalilgi/adkalkan/issues> |
-| Support email | `SUPPORT_EMAIL_YOUR_ADDRESS` |
+| Support email | ferhatdogan55@gmail.com |
 | Privacy policy | <https://sosyalilgi.github.io/adkalkan/privacy.html> |
 | Icon | `extension/icons/icon128.png` (128x128) |
-| Screenshots | `store-assets/tr-basic-1280x800.png`, `tr-full-1280x800.png`, `tr-off-1280x800.png` |
+| Screenshots | `store-assets/tr-basic-1280x800.png`, `tr-full-1280x800.png`, `tr-off-1280x800.png`, `about-tr-1280x800.png` |
 | Small promo tile | `store-assets/promo-440x280.png` |
 | Package | `dist/adkalkan-<version>.zip` |
 | Data usage | **No data collected or used** |

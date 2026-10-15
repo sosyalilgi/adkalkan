@@ -74,6 +74,18 @@ button[hidden] { display: none; }
 .grant-msg { color: var(--danger); margin: 6px 0 0; }
 .rules { color: var(--muted); margin: 4px 0 0; }
 .footer-note { color: var(--muted); margin: 2px 0 0; font-size: 11px; }
+.footer-legal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--card);
+  color: var(--muted);
+  font-size: 11px;
+}
+button.link.tiny { font-size: 11px; padding: 0; }
 
 .switch { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
 .switch input { opacity: 0; width: 0; height: 0; }

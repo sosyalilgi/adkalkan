@@ -99,6 +99,10 @@ html,body{width:1280px;height:800px;margin:0;background:#0d1117;color:#e6edf3;
       <button class="link">${copy[lang].grantAll}</button>
       <p class="rules">${copy[lang].ruleLabel}: ${copy[lang].rules}</p>
       <p class="footer-note">${copy[lang].note} v${version || pkg.version}</p>
+      <div class="footer-legal">
+        <span>© 2026 AdKalkan · MIT</span>
+        <button class="link tiny">${lang === "tr" ? "Hakkında" : "About"}</button>
+      </div>
     </footer>
   </div>
 </div>

@@ -24,5 +24,22 @@
   "grantDenied": { "message": "İzin verilmedi." },
   "unsupportedPage": { "message": "AdKalkan bu sayfada çalışmaz." },
   "footerNote": { "message": "Hiçbir veri tarayıcınızdan çıkmaz." },
-  "rulesetsLabel": { "message": "Yüklü filtre kuralı" }
+  "rulesetsLabel": { "message": "Yüklü filtre kuralı" },
+  "aboutButton": { "message": "Hakkında" },
+  "optTitle": { "message": "AdKalkan Hakkında" },
+  "optVersionLabel": { "message": "Sürüm" },
+  "optIntro": { "message": "AdKalkan, Chrome için gizlilik öncelikli bir reklam engelleyicidir. Reklamları ve reklam izleyicilerini tarayıcının kendi declarativeNetRequest motoruyla engeller, hiçbir veri toplamaz ve MIT lisansı ile tamamen açık kaynaktır." },
+  "optNoDataTitle": { "message": "Veri toplama yok" },
+  "optNoDataText": { "message": "Analitik, telemetri, sayaç ve çökme raporu yoktur. Eklenti kendi başına hiçbir ağ isteği yapmaz: tüm filtre kuralları yapı aşamasında pakete derlenir." },
+  "optHowTitle": { "message": "Nasıl çalışır" },
+  "optHowText": { "message": "Ağ seviyesinde engelleme hiçbir site izni istemeden her sitede çalışır. Kozmetik gizleme (boş reklam kutularının gizlenmesi) yalnızca açıkça izin verdiğiniz sitede, ya da tüm sitelere izin verirseniz etkinleşir." },
+  "optPrivacyTitle": { "message": "Gizlilik" },
+  "optPrivacyText": { "message": "Tercihleriniz (açık/kapama durumu, site istisnaları, izin verilen siteler) yalnızca cihazınızda chrome.storage.local içinde saklanır ve cihazınızdan çıkmaz. Engellenen isteklerin sayısı bile tutulmaz." },
+  "optPrivacyLink": { "message": "Gizlilik politikasının tamamını okuyun" },
+  "optListsTitle": { "message": "Paketlenen filtre listeleri" },
+  "optListsText": { "message": "Kurallar bu üçüncü taraf listelerden yapı aşamasında derlenir ve eklenti içinde değiştirilmeden gelir. Her listenin kendi lisansı ve sahibi vardır; kesin koşullar için kaynak depolarına bakın." },
+  "optLicenseTitle": { "message": "Lisans ve telif" },
+  "optLicenseText": { "message": "AdKalkan kaynak kodu MIT lisansı ile dağıtılmaktadır. Filtre listeleri ilgili yazarlarına aittir ve kendi koşullarıyla yeniden dağıtılır." },
+  "optSupportTitle": { "message": "Destek ve iletişim" },
+  "optCopyright": { "message": "© 2026 AdKalkan · Tüm hakları saklıdır." }
 }

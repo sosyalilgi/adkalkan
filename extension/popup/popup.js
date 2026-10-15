@@ -15,7 +15,11 @@ function applyStaticI18n() {
     el.textContent = t(el.dataset.i18n);
   }
   $("version").textContent = `v${chrome.runtime.getManifest().version}`;
+  $("copyright").textContent = `© ${new Date().getFullYear()} AdKalkan · MIT`;
+  $("aboutBtn").textContent = t("aboutButton");
 }
+
+$("aboutBtn").addEventListener("click", () => chrome.runtime.openOptionsPage());
 
 async function refresh() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });

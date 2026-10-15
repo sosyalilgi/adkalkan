@@ -24,5 +24,22 @@
   "grantDenied": { "message": "Permission was not granted." },
   "unsupportedPage": { "message": "AdKalkan does not run on this page." },
   "footerNote": { "message": "No data ever leaves your browser." },
-  "rulesetsLabel": { "message": "Filter rules loaded" }
+  "rulesetsLabel": { "message": "Filter rules loaded" },
+  "aboutButton": { "message": "About" },
+  "optTitle": { "message": "About AdKalkan" },
+  "optVersionLabel": { "message": "Version" },
+  "optIntro": { "message": "AdKalkan is a privacy-first ad blocker for Chrome. It blocks ads and ad trackers with the browser's own declarativeNetRequest engine, collects no data, and is fully open source under the MIT license." },
+  "optNoDataTitle": { "message": "No data collection" },
+  "optNoDataText": { "message": "No analytics, no telemetry, no counters, no crash reports. The extension makes no network requests of its own: every filter rule is compiled into the package at build time." },
+  "optHowTitle": { "message": "How it works" },
+  "optHowText": { "message": "Network-level blocking works on every site without any site permission. Cosmetic filtering (hiding empty ad boxes) activates only on sites you explicitly grant, or on all sites if you choose to grant them." },
+  "optPrivacyTitle": { "message": "Privacy" },
+  "optPrivacyText": { "message": "Your preferences (on/off state, site exceptions, granted sites) are stored locally in chrome.storage.local and never leave your device. Blocked requests are not even counted." },
+  "optPrivacyLink": { "message": "Read the full privacy policy" },
+  "optListsTitle": { "message": "Bundled filter lists" },
+  "optListsText": { "message": "Rules are compiled from these third-party lists at build time and ship unmodified inside the extension. Each list keeps its own license and authorship; see the source repositories for the exact terms." },
+  "optLicenseTitle": { "message": "License & copyright" },
+  "optLicenseText": { "message": "AdKalkan source code is licensed under the MIT license. Filter lists belong to their respective authors and are redistributed under their own terms." },
+  "optSupportTitle": { "message": "Support & contact" },
+  "optCopyright": { "message": "© 2026 AdKalkan · All rights reserved." }
 }
