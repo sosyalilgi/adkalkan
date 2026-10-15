@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="../icons/icon32.png" alt="">
+    <h1 data-i18n="popupTitle"></h1>
+    <label class="switch" title="global">
+      <input type="checkbox" id="globalToggle">
+      <span class="slider"></span>
+    </label>
+  </header>
+
+  <main>
+    <p id="siteLabel" class="site"></p>
+    <div id="statusBox" class="status">
+      <p id="statusTitle" class="status-title"></p>
+      <p id="statusHint" class="status-hint"></p>
+    </div>
+
+    <button id="grantSiteBtn" class="primary"></button>
+    <button id="toggleSiteBtn"></button>
+    <p id="grantMsg" class="grant-msg" hidden></p>
+  </main>
+
+  <footer>
+    <button id="grantAllBtn" class="link"></button>
+    <button id="revokeBtn" class="link"></button>
+    <p id="rulesInfo" class="rules"></p>
+    <p class="footer-note"><span data-i18n="footerNote"></span> <span id="version"></span></p>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

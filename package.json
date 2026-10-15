@@ -1,0 +1,16 @@
+{
+  "name": "adkalkan",
+  "version": "0.1.2",
+  "private": true,
+  "description": "AdKalkan - privacy-first ad blocker (Manifest V3, zero data collection)",
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.js",
+    "build:dev": "node tools/build.js --no-bump",
+    "test": "node tools/test-match.js",
+    "shots": "node tools/make-screenshots.js",
+    "pack": "node tools/pack.js",
+    "preflight": "node tools/preflight.js"
+  },
+  "license": "MIT"
+}

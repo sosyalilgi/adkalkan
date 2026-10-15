@@ -1,0 +1,28 @@
+{
+  "extName": { "message": "AdKalkan – Ad Blocker" },
+  "extDescription": {
+    "message": "Privacy-first ad blocker. No data collection, no remote code. Blocking runs in the browser engine."
+  },
+  "popupTitle": { "message": "AdKalkan" },
+  "globalEnabled": { "message": "Protection enabled" },
+  "globalDisabled": { "message": "Protection disabled" },
+  "protectionOffForSite": { "message": "AdKalkan is off on this site" },
+  "basicModeTitle": { "message": "Basic protection" },
+  "basicModeHint": {
+    "message": "Ad and tracker requests are blocked in the browser. Element hiding is not active on this site."
+  },
+  "fullModeTitle": { "message": "Full protection" },
+  "fullModeHint": {
+    "message": "Ad requests are blocked and ad elements are hidden on this site."
+  },
+  "grantSiteButton": { "message": "Protect this site fully" },
+  "grantAllButton": { "message": "Grant full protection on all sites" },
+  "grantedAllLabel": { "message": "Full protection is on for all sites" },
+  "revokeButton": { "message": "Revoke permissions" },
+  "disableSiteButton": { "message": "Turn off on this site" },
+  "enableSiteButton": { "message": "Turn back on for this site" },
+  "grantDenied": { "message": "Permission was not granted." },
+  "unsupportedPage": { "message": "AdKalkan does not run on this page." },
+  "footerNote": { "message": "No data ever leaves your browser." },
+  "rulesetsLabel": { "message": "Filter rules loaded" }
+}

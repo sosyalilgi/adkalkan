@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AdKalkan — Gizlilik Politikası / Privacy Policy</title>
+<meta name="description" content="AdKalkan collects no data. Privacy policy for the AdKalkan Chrome extension.">
+<style>
+  :root { color-scheme: light dark; --accent:#1a7f4b; }
+  body { margin:0; padding:40px 20px 72px; font:16px/1.65 system-ui,"Segoe UI",Arial,sans-serif; }
+  main { max-width:760px; margin:0 auto; }
+  h1 { font-size:28px; margin:0 0 6px; }
+  h2 { font-size:19px; margin:32px 0 8px; color:var(--accent); }
+  .lead { color:#666; margin:0 0 8px; }
+  ul { padding-left:20px; }
+  li { margin:0 0 6px; }
+  .verdict { background:#eefaf3; border-left:4px solid var(--accent); padding:14px 16px; border-radius:6px; margin:18px 0; }
+  @media (prefers-color-scheme: dark) {
+    .lead { color:#9aa4b2; }
+    .verdict { background:#12261c; }
+  }
+  footer { margin-top:48px; padding-top:16px; border-top:1px solid #8883; color:#666; font-size:14px; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<main>
+
+<h1>AdKalkan — Gizlilik Politikası</h1>
+<p class="lead"><a href="#en">English version</a> · Son güncelleme: <time>2026</time></p>
+
+<div class="verdict">
+  <strong>AdKalkan hiçbir kullanıcı verisi toplamaz, saklamaz, işlemez, iletmez veya satmaz.</strong>
+  Hiçbir analitik, telemetri, sayaç veya hata raporlama yoktur.
+</div>
+
+<h2>Veri toplama</h2>
+<ul>
+  <li>Reklam engelleme, <strong>tarayıcının kendi</strong> <code>declarativeNetRequest</code> motoru tarafından yapılır. AdKalkan'ın kodu ağ isteklerinizi veya gezinme geçmişinizi asla okumaz, incelemez veya değiştirmez.</li>
+  <li>Eklenti, kendi adına <strong>hiçbir ağ isteği yapmaz</strong>. Tüm filtre kuralları paketin içinde gelir ve yalnızca yeni bir eklenti sürümü kurulduğunda güncellenir.</li>
+  <li>Tercihleriniz (açık/kapama durumu, site istisnaları, verilen izinler) yalnızca cihazınızda <code>chrome.storage.local</code> içinde saklanır ve cihazınızdan çıkmaz.</li>
+  <li>Reklam engellenen isteklerin sayısı bile <strong>sayılmaz</strong>; istatistik tutulmaz.</li>
+  <li>Verileriniz hiçbir şekilde üçüncü taraflarla paylaşılmaz veya satılmaz.</li>
+</ul>
+
+<h2>İzinler ve nedenleri</h2>
+<ul>
+  <li><strong><code>declarativeNetRequest</code></strong> — reklam ve izleyici isteklerini tarayıcı motorunda engellemek için (tek işlev).</li>
+  <li><strong><code>storage</code></strong> — açık/kapama tercihinizi ve site istisnalarınızı yerel olarak saklamak için.</li>
+  <li><strong><code>activeTab</code></strong> — açılır pencerede o anki sitenin adresini görüntüleyebilmek için.</li>
+  <li><strong><code>scripting</code></strong> — yalnızca sizin izin verdiğiniz sitelerde reklam öğelerini gizlemek için.</li>
+  <li><strong>Site izinleri (isteğe bağlı)</strong> — kurulumda <strong>hiçbir site izni istenmez</strong>. Görsel gizlemeyi etkinleştirmek için yalnızca istediğiniz siteye, tüm sitelere izin vermek isterseniz oraya tıklayarak verirsiniz.</li>
+</ul>
+
+<h2>Kaynak kodu</h2>
+<p>AdKalkan açık kaynaktır (MIT lisansı) ve her satırı denetlenebilir:
+<a href="https://github.com/sosyalilgi/adkalkan">github.com/sosyalilgi/adkalkan</a></p>
+
+<h2>Üçüncü taraf filtre listeleri</h2>
+<p>Paketlenen filtre listeleri EasyList, EasyPrivacy, AdGuard Türkçe filtre ve Peter Lowe's
+List'tir. Bunlar statik metin kural dosyalarıdır; eklenti çalışırken bunları güncellemek için
+ağa bağlanmaz.</p>
+
+<h2>Değişiklikler</h2>
+<p>Bu politika eklenti sürümüyle birlikte güncellenir. Kayıt geçmişi depodaki commit
+geçmişinden izlenebilir.</p>
+
+<h2>İletişim</h2>
+<p>Sorularınız için: <a href="https://github.com/sosyalilgi/adkalkan/issues">GitHub Issues</a></p>
+
+<footer><a href="#en">↓ English</a></footer>
+
+<h1 id="en">AdKalkan — Privacy Policy</h1>
+<p class="lead"><a href="#">Türkçe</a> · Last updated: <time>2026</time></p>
+
+<div class="verdict">
+  <strong>AdKalkan does not collect, store, process, transmit, or sell any user data.</strong>
+  No analytics, no telemetry, no counters, no crash reporting.
+</div>
+
+<h2>Data collection</h2>
+<ul>
+  <li>Ad blocking is performed by the browser's own <code>declarativeNetRequest</code> engine. AdKalkan's own code never reads, inspects, or modifies your network requests or browsing history.</li>
+  <li>The extension makes <strong>no network requests of its own</strong>. All filter rules ship inside the package and are only refreshed when you install a new extension version.</li>
+  <li>Your preferences (on/off state, site exceptions, granted permissions) are stored locally in <code>chrome.storage.local</code> and never leave your device.</li>
+  <li>Blocked requests are <strong>not even counted</strong>; no statistics are kept.</li>
+  <li>Nothing is ever shared with or sold to third parties.</li>
+</ul>
+
+<h2>Permissions and why they exist</h2>
+<ul>
+  <li><strong><code>declarativeNetRequest</code></strong> — to block ad/tracker requests in the browser engine (the extension's single purpose).</li>
+  <li><strong><code>storage</code></strong> — to persist your on/off choice and site exceptions locally.</li>
+  <li><strong><code>activeTab</code></strong> — so the popup can read the current site's address.</li>
+  <li><strong><code>scripting</code></strong> — to hide ad elements only on sites you have granted.</li>
+  <li><strong>Site permissions (optional)</strong> — <strong>no site permission is requested at install</strong>. You grant a single site, or all sites, only by explicitly clicking the corresponding button.</li>
+</ul>
+
+<h2>Source code</h2>
+<p>AdKalkan is open source (MIT) and fully auditable:
+<a href="https://github.com/sosyalilgi/adkalkan">github.com/sosyalilgi/adkalkan</a></p>
+
+<h2>Third-party filter lists</h2>
+<p>Bundled lists are EasyList, EasyPrivacy, the AdGuard Turkish filter and Peter Lowe's List.
+These are static text rule files; the extension never contacts the network to update them.</p>
+
+<h2>Contact</h2>
+<p>Questions: <a href="https://github.com/sosyalilgi/adkalkan/issues">GitHub Issues</a></p>
+
+</main>
+</body>
+</html>

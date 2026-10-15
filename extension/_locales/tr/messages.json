@@ -1,0 +1,28 @@
+{
+  "extName": { "message": "AdKalkan – Reklam Engelleyici" },
+  "extDescription": {
+    "message": "Gizlilik öncelikli reklam engelleyici. Veri toplama yok, uzaktan kod yok. Engelleme tarayıcı motorunda çalışır."
+  },
+  "popupTitle": { "message": "AdKalkan" },
+  "globalEnabled": { "message": "Koruma açık" },
+  "globalDisabled": { "message": "Koruma kapalı" },
+  "protectionOffForSite": { "message": "AdKalkan bu sitede kapalı" },
+  "basicModeTitle": { "message": "Temel koruma" },
+  "basicModeHint": {
+    "message": "Reklam ve izleyici istekleri tarayıcıda engelleniyor. Bu sitede öğe gizleme etkin değil."
+  },
+  "fullModeTitle": { "message": "Tam koruma" },
+  "fullModeHint": {
+    "message": "Bu sitede reklam istekleri engelleniyor ve reklam öğeleri gizleniyor."
+  },
+  "grantSiteButton": { "message": "Bu siteyi tam koru" },
+  "grantAllButton": { "message": "Tüm sitelerde tam korumaya izin ver" },
+  "grantedAllLabel": { "message": "Tüm sitelerde tam koruma açık" },
+  "revokeButton": { "message": "İzinleri geri al" },
+  "disableSiteButton": { "message": "Bu sitede kapat" },
+  "enableSiteButton": { "message": "Bu siteyi yeniden aç" },
+  "grantDenied": { "message": "İzin verilmedi." },
+  "unsupportedPage": { "message": "AdKalkan bu sayfada çalışmaz." },
+  "footerNote": { "message": "Hiçbir veri tarayıcınızdan çıkmaz." },
+  "rulesetsLabel": { "message": "Yüklü filtre kuralı" }
+}

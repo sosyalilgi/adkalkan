@@ -1,0 +1,27 @@
+{
+  "lists": [
+    {
+      "id": "peterlowe",
+      "url": "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=0&mimetype=plaintext",
+      "format": "adblock"
+    },
+    {
+      "id": "easylist",
+      "url": "https://easylist.to/easylist/easylist.txt",
+      "format": "adblock"
+    },
+    {
+      "id": "easyprivacy",
+      "url": "https://easylist.to/easylist/easyprivacy.txt",
+      "format": "adblock"
+    },
+    {
+      "id": "adguard-tr",
+      "url": "https://filters.adtidy.org/extension/chromium/filters/13.txt",
+      "format": "adblock"
+    }
+  ],
+  "rulesPerFile": 6000,
+  "enabledBudget": 250000,
+  "cosmeticChunkCount": 8
+}
