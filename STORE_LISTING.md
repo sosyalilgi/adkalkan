@@ -18,9 +18,14 @@
 | Icon | `extension/icons/icon128.png` (128x128) |
 | Screenshots | `store-assets/tr-basic-1280x800.png`, `tr-full-1280x800.png`, `tr-off-1280x800.png`, `about-tr-1280x800.png` |
 | Small promo tile | `store-assets/promo-440x280.png` |
+| Large promo tile | `store-assets/promo-large-1400x560.png` |
 | Package | `dist/adkalkan-<version>.zip` |
 | Data usage | **No data collected or used** |
 | Chrome Web Store API | No |
+
+> Görseller `npm run shots` ile üretilir (gerçek popup HTML/CSS'inden render edilir),
+> boyutları `npm run check:assets` ile doğrulanır. Mağaza görselleri yerelleştirilemez:
+> TR kitle için `store-assets/` kökü, uluslararası erişim için `store-assets/en/` kullanılır.
 
 ## Summary (<=132 chars)
 

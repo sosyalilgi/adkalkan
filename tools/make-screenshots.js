@@ -1,4 +1,4 @@
-// Generates Chrome Web Store listing assets from the real popup markup/CSS:
+﻿// Generates Chrome Web Store listing assets from the real popup markup/CSS:
 //   store-assets/tr-<state>-1280x800.png  (3 popup states)
 //   store-assets/en-<state>-1280x800.png
 //   store-assets/promo-440x280.png
@@ -30,6 +30,11 @@ const ICONS = fs.readdirSync(path.join(ROOT, "extension", "icons"))
   .filter(f => f.endsWith(".png"))
   .map(f => `file:///${path.join(ROOT, "extension", "icons", f).replace(/\\/g, "/")}`);
 
+// live rule count so the store art never shows a stale number
+const metaPath = path.join(ROOT, "extension", "rulesets", "meta.json");
+const ruleTotal = fs.existsSync(metaPath) ? JSON.parse(fs.readFileSync(metaPath, "utf8")).total : 0;
+const fmt = (lang, n) => n.toLocaleString(lang === "tr" ? "tr-TR" : "en-US");
+
 const copy = {
   tr: {
     basic: { title: "Temel koruma", hint: "Reklam ve izleyici istekleri tarayıcıda engelleniyor. Bu sitede öğe gizleme etkin değil.", cta: "Bu siteyi tam koru", disable: "Bu sitede kapat", site: "www.habersitesi.com" },
@@ -38,7 +43,7 @@ const copy = {
     note: "Hiçbir veri tarayıcınızdan çıkmaz.",
     ruleLabel: "Yüklü filtre kuralı",
     grantAll: "Tüm sitelerde tam korumaya izin ver",
-    rules: "115.603"
+    rules: fmt("tr", ruleTotal)
   },
   en: {
     basic: { title: "Basic protection", hint: "Ad and tracker requests are blocked in the browser. Element hiding is not active on this site.", cta: "Protect this site fully", disable: "Turn off on this site", site: "www.news-site.com" },
@@ -47,7 +52,7 @@ const copy = {
     note: "No data ever leaves your browser.",
     ruleLabel: "Filter rules loaded",
     grantAll: "Grant full protection on all sites",
-    rules: "115,603"
+    rules: fmt("en", ruleTotal)
   }
 };
 
@@ -144,8 +149,8 @@ function bullets(lang) {
 
 function chips(lang) {
   const items = lang === "tr"
-    ? [["115.603", "filtre kuralı"], ["0", "byte veri toplama"], ["MIT", "açık kaynak"]]
-    : [["115,603", "filter rules"], ["0", "bytes collected"], ["MIT", "open source"]];
+    ? [[fmt("tr", ruleTotal), "filtre kuralı"], ["0", "byte veri toplama"], ["MIT", "açık kaynak"]]
+    : [[fmt("en", ruleTotal), "filter rules"], ["0", "bytes collected"], ["MIT", "open source"]];
   return items.map(([n, l]) => `<span class="chip"><b>${n}</b>${l}</span>`).join("");
 }
 
@@ -166,21 +171,50 @@ p{margin:0;font-size:16px;color:#9ad5b4}
 }
 
 function shoot(html, outName, w, h) {
-  const htmlPath = path.join(OUT, `_tmp_${outName}.html`);
+  // English variants live in store-assets/en/ - a store listing uses one language
+  const destDir = outName.startsWith("en-") ? path.join(OUT, "en") : OUT;
+  fs.mkdirSync(destDir, { recursive: true });
+  const htmlPath = path.join(destDir, `_tmp_${outName}.html`);
   fs.writeFileSync(htmlPath, html);
   const res = spawnSync(CHROME, [
     "--headless=new", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=1",
-    `--window-size=${w},${h}`, `--screenshot=${path.join(OUT, outName)}`,
+    `--window-size=${w},${h}`, `--screenshot=${path.join(destDir, outName)}`,
     `--user-data-dir=${path.join(OUT, "_chrome_profile")}`,
     "file:///" + htmlPath.replace(/\\/g, "/")
   ], { stdio: "pipe" });
   fs.rmSync(htmlPath, { force: true });
-  const png = path.join(OUT, outName);
+  const png = path.join(destDir, outName);
   if (!fs.existsSync(png)) {
     console.error(`FAILED ${outName}: ${(res.stderr || "").toString().slice(-400)}`);
     process.exit(1);
   }
-  console.log(`${outName}  ${(fs.statSync(png).size / 1024).toFixed(0)} KB`);
+  console.log(`  ${outName}  ${(fs.statSync(png).size / 1024).toFixed(0)} KB`);
+}
+
+function promoLarge(version) {
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+html,body{width:1400px;height:560px;margin:0;overflow:hidden;color:#fff;
+  background:radial-gradient(1200px 600px at 20% 0%,#1a7f4b 0%,#0d1117 60%);
+  font-family:"Segoe UI",system-ui,Arial,sans-serif}
+.wrap{width:100%;height:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:0 90px;box-sizing:border-box}
+.left{display:flex;align-items:center;gap:34px}
+img{width:150px;height:150px}
+h1{font-size:76px;margin:0;letter-spacing:1px}
+p{font-size:27px;margin:10px 0 0;color:#9ad5b4}
+.right{text-align:left;font-size:23px;color:#c9d1d9;line-height:1.7}
+.right b{color:#7ee2a8}
+</style></head><body><div class="wrap">
+<div class="left">
+  <img src="${ICONS.find(i => i.includes("icon128"))}" alt="">
+  <div><h1>AdKalkan</h1><p>Reklam engelleyici &middot; Veri toplama yok</p></div>
+</div>
+<div class="right">
+  <b>${copy.tr.rules}</b> filtre kuralı<br>
+  Kurulumda site izni <b>istenmez</b><br>
+  Açık kaynak &middot; MIT lisansı
+</div>
+</div></body></html>`;
 }
 
 const version = JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8")).version;
@@ -190,5 +224,6 @@ for (const lang of ["tr", "en"]) {
   }
 }
 shoot(promo(version), "promo-440x280.png", 440, 280);
+shoot(promoLarge(version), "promo-large-1400x560.png", 1400, 560);
 fs.rmSync(path.join(OUT, "_chrome_profile"), { recursive: true, force: true });
 console.log("store assets written to store-assets/");

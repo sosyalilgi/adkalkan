@@ -1,6 +1,6 @@
 {
   "name": "adkalkan",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "private": true,
   "description": "AdKalkan - privacy-first ad blocker (Manifest V3, zero data collection)",
   "type": "module",
@@ -9,6 +9,8 @@
     "build:dev": "node tools/build.js --no-bump",
     "test": "node tools/test-match.js",
     "shots": "node tools/make-screenshots.js && node tools/make-about-shot.js tr",
+    "icons": "powershell -ExecutionPolicy Bypass -File tools/make-icons.ps1",
+    "check:assets": "node tools/check-assets.js",
     "pack": "node tools/pack.js",
     "preflight": "node tools/preflight.js"
   },
