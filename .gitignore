@@ -3,4 +3,5 @@ dist/
 store-assets/
 extension/rulesets/
 extension/manifest.json
+extension/_metadata/
 *.log
