@@ -2,6 +2,7 @@
 // Run: npm run preflight   (after npm run build && npm run pack)
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -112,5 +113,14 @@ console.log("=== Chrome Web Store preflight ===");
 for (const m of ok) console.log("  PASS  " + m);
 for (const m of warns) console.log("  WARN  " + m);
 for (const m of fails) console.log("  FAIL  " + m);
+
+// README integrity (broken image paths / anchors break the repo front page)
+try {
+  execFileSync(process.execPath, [path.join(ROOT, "tools", "check-readme.js")], { stdio: "pipe" });
+  ok.push("README links and images resolve");
+} catch (err) {
+  fails.push(`README check failed:\n${(err.stdout || "").toString().trim()}`);
+}
+
 console.log(`\n${ok.length} passed, ${warns.length} warnings, ${fails.length} failures`);
 process.exit(fails.length ? 1 : 0);
