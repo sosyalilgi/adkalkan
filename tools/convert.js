@@ -120,10 +120,89 @@ function isDnrSafeRegex(p) {
   return true;
 }
 
-// Inside adblock regex rules, a "*" that cannot act as a quantifier (after
-// start, "(" or "|") is the adblock wildcard: convert it to ".*".
-// Also escapes empty character classes, which RE2 rejects.
-// Returns the RE2 string, or null if no form compiles.
+// Chrome skips static rules whose regexFilter exceeds 2 KB when compiled.
+// The limit applies to RE2's compiled program *and* to the memory used while
+// building the automaton, so wide repetitions ({100,}) cost far more than
+// their source length suggests. Two guards:
+//   RE2_MAX_REPEAT  - repetitions wider than this are dropped (cannot be split)
+//   RE2_MAX_COST    - estimated program size; large alternations get split first
+// Chrome's real limit is on the compiled RE2 program (2 KB). This estimate is
+// deliberately conservative: real failures observed in Chrome started around
+// est 537 (huge TLD alternations) and est 26 (`{100,}` repetitions), while a
+// healthy rule sat at est 197. We keep well below the worst *accepted* case.
+export const RE2_MAX_REPEAT = 12;
+export const RE2_MAX_COST = 110;
+
+export function regexCost(re) {
+  let lit = 0, branch = 0, rep = 0, group = 0, cls = 0, wideRepeat = 0;
+  const stack = [{ branches: 0 }];
+  for (let i = 0; i < re.length; i++) {
+    const c = re[i];
+    if (c === "\\") { i++; lit++; continue; }
+    if (c === "(") { group++; stack.push({ branches: 0 }); continue; }
+    if (c === ")") { const f = stack.pop(); if (f && f.branches) branch += f.branches; continue; }
+    if (c === "|") { stack[stack.length - 1].branches++; continue; }
+    if (c === "[") {
+      cls++;
+      while (i < re.length && re[i] !== "]") { if (re[i] === "\\") i++; i++; }
+      continue;
+    }
+    const m = /^\{(\d+)(,(\d*))?\}/.exec(re.slice(i));
+    if (c === "{" && m) {
+      const lo = parseInt(m[1], 10);
+      const hi = m[2] === undefined ? lo : (m[3] ? parseInt(m[3], 10) : Infinity);
+      const width = hi === Infinity ? lo : Math.max(lo, Math.min(hi, 200));
+      rep += width * 3;
+      if (width > RE2_MAX_REPEAT) wideRepeat = Math.max(wideRepeat, width);
+      i += m[0].length - 1;
+      continue;
+    }
+    if (c === "*" || c === "+") { rep += 3; continue; }
+    if (c === "?") continue;
+    lit++;
+  }
+  for (const f of stack) if (f.branches) branch += f.branches;
+  return { lit, branch, rep, group, cls, wideRepeat, est: lit + branch * 12 + rep + group * 3 + cls * 2 };
+}
+
+// Splits "^(?:a|b|c)$" style patterns by splitting one flat alternation group
+// into several equivalent patterns. Semantics are preserved (the union of the
+// split alternations equals the original). Returns [re] unchanged when there
+// is nothing to split.
+export function splitLargeAlternations(re) {
+  let patterns = [re];
+  for (let pass = 0; pass < 3; pass++) {
+    const next = [];
+    let split = false;
+    for (const p of patterns) {
+      if (regexCost(p).est <= RE2_MAX_COST && !regexCost(p).wideRepeat) { next.push(p); continue; }
+      // find the first flat group that contains alternation: "(...)" with no nested parens
+      const m = /\(([^()]*\|[^()]*)\)/.exec(p);
+      if (!m) { next.push(p); continue; }
+      const branches = m[1].split("|");
+      if (branches.length < 2) { next.push(p); continue; }
+      // greedily pack branches so each chunk stays under the cost limit
+      const head = p.slice(0, m.index);
+      const tail = p.slice(m.index + m[0].length);
+      const chunks = [];
+      let cur = "";
+      for (const b of branches) {
+        const candidate = cur ? `${cur}|${b}` : b;
+        const probe = `${head}(${candidate})${tail}`;
+        if (cur && regexCost(probe).est > RE2_MAX_COST) { chunks.push(cur); cur = b; }
+        else cur = candidate;
+      }
+      if (cur) chunks.push(cur);
+      if (chunks.length < 2) { next.push(p); continue; }
+      for (const c of chunks) next.push(`${head}(${c})${tail}`);
+      split = true;
+    }
+    patterns = next;
+    if (!split) break;
+  }
+  return patterns;
+}
+
 function adblockRegexToRe2(p) {
   let s = p;
   if (/(^|[^\\])\[\]/.test(s)) s = s.replace(/(^|[^\\])\[\]/g, "$1\\[\\]");
@@ -166,7 +245,8 @@ export function parseNetworkRule(line) {
         [...opts.types].some(t => opts.excluded.has(t))) return { skip: "conflicting-types" };
   }
 
-  const condition = {};
+  const baseCondition = {};
+  let rules = null;
   // adblock regex rules are wrapped in slashes: /regex/; everything else is a
   // substring/wildcarded pattern, even if it starts with a literal "/".
   const isDelimitedRegex = pattern.length > 2 && pattern.startsWith("/") &&
@@ -174,7 +254,15 @@ export function parseNetworkRule(line) {
   if (isDelimitedRegex) {
     const re = adblockRegexToRe2(pattern.slice(1, -1));
     if (!re || re.length < 2 || !isDnrSafeRegex(re)) return { skip: "unsafe-regex" };
-    condition.regexFilter = re;
+    // Large alternations are split into equivalent smaller rules; wide
+    // repetitions ({100,}) cannot be split and are dropped instead, because
+    // Chrome skips any regexFilter whose compiled form exceeds 2 KB.
+    const parts = splitLargeAlternations(re).filter(p => {
+      const cost = regexCost(p);
+      return !cost.wideRepeat && cost.est <= RE2_MAX_COST;
+    });
+    if (!parts.length) return { skip: "regex-too-big" };
+    rules = parts.map(p => ({ regexFilter: p }));
   } else {
     pattern = percentEncodeNonAscii(pattern);
     // Chrome's url_pattern_index rejects "||" followed by "*" (indexed_rule.cc
@@ -182,20 +270,7 @@ export function parseNetworkRule(line) {
     // redundant for substring matching, so drop both.
     if (pattern.startsWith("||*")) pattern = pattern.slice(3);
     if (!isDnrSafeUrlFilter(pattern)) return { skip: "unsafe-or-generic" };
-    condition.urlFilter = pattern;
-  }
-  if (opts) {
-    if (opts.types.size) condition.resourceTypes = [...opts.types];
-    if (opts.excluded.size) condition.excludedRequestTypes = [...opts.excluded];
-    if (opts.thirdParty) condition.thirdParty = true;
-    if (opts.domainList) {
-      const parts = opts.domainList.split("|");
-      if (parts.some(d => d.includes("~") || d.includes("/"))) return { skip: "complex-domain" };
-      const clean = parts.map(d => d.toLowerCase().trim())
-        .filter(d => /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(d));
-      if (!clean.length) return { skip: "complex-domain" };
-      condition.initiatorDomains = [...new Set(clean)];
-    }
+    rules = [{ urlFilter: pattern }];
   }
 
   const actionType = isException ? "allow" : "block";
@@ -203,7 +278,26 @@ export function parseNetworkRule(line) {
   if (isException) priority = 10;
   else if (opts && opts.important) priority = 2;
 
-  return { rule: { action: { type: actionType }, condition, priority } };
+  const out = [];
+  for (const filter of rules) {
+    const condition = { ...filter };
+    if (opts) {
+      if (opts.types.size) condition.resourceTypes = [...opts.types];
+      if (opts.excluded.size) condition.excludedRequestTypes = [...opts.excluded];
+      if (opts.thirdParty) condition.thirdParty = true;
+      if (opts.domainList) {
+        const parts = opts.domainList.split("|");
+        if (parts.some(d => d.includes("~") || d.includes("/"))) continue;
+        const clean = parts.map(d => d.toLowerCase().trim())
+          .filter(d => /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(d));
+        if (!clean.length) continue;
+        condition.initiatorDomains = [...new Set(clean)];
+      }
+    }
+    out.push({ action: { type: actionType }, condition, priority });
+  }
+  if (!out.length) return { skip: "complex-domain" };
+  return { rules: out };
 }
 
 // ---------- cosmetic ----------

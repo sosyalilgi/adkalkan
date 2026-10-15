@@ -3,7 +3,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import https from "node:https";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { parseNetworkRule, parseCosmeticRule } from "./convert.js";
+import { parseNetworkRule, parseCosmeticRule, regexCost, RE2_MAX_COST, RE2_MAX_REPEAT } from "./convert.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "extension");
@@ -117,12 +117,14 @@ for (const list of config.lists) {
     const r = parseNetworkRule(line);
     if (!r) continue;
     if (r.skip) { skipCount[r.skip] = (skipCount[r.skip] || 0) + 1; continue; }
-    const key = r.rule.action.type + JSON.stringify(r.rule.condition);
-    if (seenNetwork.has(key)) { stats.deduped++; continue; }
-    seenNetwork.add(key);
-    r.rule.source = list.id;
-    networkRules.push(r.rule);
-    converted++;
+    for (const rule of r.rules) {
+      const key = rule.action.type + JSON.stringify(rule.condition);
+      if (seenNetwork.has(key)) { stats.deduped++; continue; }
+      seenNetwork.add(key);
+      rule.source = list.id;
+      networkRules.push(rule);
+      converted++;
+    }
   }
   stats.converted[list.id] = converted;
   stats.skipped[list.id] = skipCount;
@@ -164,6 +166,10 @@ function checkRule({ source, rule }) {
     regexRuleCount++;
     if (NON_ASCII.test(c.regexFilter)) errors.push(`${source} id ${rule.id}: non-ascii regexFilter ${c.regexFilter}`);
     try { new RegExp(c.regexFilter); } catch { errors.push(`${source} id ${rule.id}: invalid regexFilter ${c.regexFilter}`); }
+    // Chrome silently skips regexFilters whose compiled form exceeds 2 KB
+    const cost = regexCost(c.regexFilter);
+    if (cost.wideRepeat) errors.push(`${source} id ${rule.id}: repetition {${cost.wideRepeat},} exceeds RE2 budget - rule would be skipped by Chrome`);
+    else if (cost.est > RE2_MAX_COST) errors.push(`${source} id ${rule.id}: regexFilter cost ${cost.est} > ${RE2_MAX_COST} - rule would be skipped by Chrome`);
   }
   for (const d of (c.initiatorDomains || [])) if (!DOMAIN_RE.test(d)) errors.push(`${source} id ${rule.id}: bad initiatorDomain ${d}`);
   for (const t of [...(c.resourceTypes || []), ...(c.excludedRequestTypes || [])]) if (!VALID_TYPES.has(t)) errors.push(`${source} id ${rule.id}: bad type ${t}`);

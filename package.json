@@ -1,6 +1,6 @@
 {
   "name": "adkalkan",
-  "version": "0.1.7",
+  "version": "0.1.10",
   "private": true,
   "description": "AdKalkan - privacy-first ad blocker (Manifest V3, zero data collection)",
   "type": "module",
